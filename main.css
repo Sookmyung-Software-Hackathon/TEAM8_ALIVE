@@ -1,0 +1,52 @@
+@charset "utf-8";
+html, body, table, tr{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#alive{
+	width:80%; 
+	/*top: 10.8%;
+	position : absolute;*/
+    /*left:100px;
+    top:100px;*/
+    }
+    
+#clock, #apm, p, #file::placeholder{       
+	font-family: 'Gowun Dodum', sans-serif;
+	/*position : absolute;*/
+	/*left:117px;
+    top:150px;*/
+    }
+    
+ 
+ul {
+	font-family: 'Gowun Dodum', sans-serif;
+	/*position : absolute;*/
+	/*left:100px; 
+	top:210px;*/
+	font-size: 1.25em;
+    list-style-type: none;
+    margin: 0;
+    margin-top: 4%;
+    padding: 0;
+    width: 100%;  /*200px*/
+    background-color: #f1f1f1;
+}
+li a {
+	font-family: 'Gowun Dodum', sans-serif;
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+li a.active {
+    background-color: #ac1e42;
+    color: white;
+}
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
