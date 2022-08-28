@@ -1,0 +1,114 @@
+@charset "utf-8";
+img{display: block;
+	margin: 0px auto;
+	 padding-bottom: 50px;
+	 }
+
+span{
+	font-family: 'Gowun Dodum', sans-serif;
+	position : static;
+    }
+
+nav{
+
+	display:block;
+}    
+
+main{
+	padding-left : 330px;
+}
+
+ul {
+	font-family: 'Gowun Dodum', sans-serif;
+	position : absolute;
+	left : 100px;
+	top : 210px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+}
+li a {
+	font-family: 'Gowun Dodum', sans-serif;
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+li a.active {
+    background-color: #ac1e42;
+    color: white;
+}
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+	
+.answer {
+	display: block;
+	font-family: 'Gowun Dodum', sans-serif;
+    display: none;
+    padding-bottom: 30px;
+    
+}
+ 
+a:link{
+	font-family: 'Gowun Dodum', sans-serif;
+	color : 707070;
+	text-decoration:none;
+}
+
+a:visited{
+	color : 707070;
+	text-decoration : none;
+}
+
+a:hover{
+	color : 6d95fc;
+	text-decoration : none;
+}
+ 
+a:active{
+	color: white; background-color: 6d95fc; 
+}
+
+div{
+	display: block;
+}
+ 
+#faq-title {
+	font-family: 'Gowun Dodum', sans-serif;
+    font-size: 25px;
+}
+  
+.faq-content {
+	display: block;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.question {
+	font-family: 'Gowun Dodum', sans-serif;
+    font-size: 19px;
+    padding: 30px 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.question:hover {
+	font-family: 'Gowun Dodum', sans-serif;
+    color: #ac1e42;
+}
+
+ [id$="-toggle"] {
+    margin-right: 15px;
+}
+
+p{
+	font-size:30px;
+	font-family: 'Gowun Dodum', sans-serif;
+}
