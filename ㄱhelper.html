@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html style="overflow-y:scroll;">
+<head>
+<meta charset="utf-8">
+<link type = "text/css" rel ="stylesheet" href = "manual.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<meta name = "keyword" content="Community page">
+<meta name="description" content="helper page">
+<meta name = "author" content = "2113424, 2116740, 2114178">
+<title>도우미 연락망</title>
+</head>
+
+<body>
+	<nav>	
+	<div style = "width : 100%; text-align: center;">
+	<a href = "index.html">
+	<img src = "alive.jpg" style="width:20%;"></a></div>
+	
+	<div style="margin-left : 109px; margin-top : 7px;">
+    <span id="clock" style="color:black; font-size: 30px;">clock</span>
+    <span id="apm" style="color:black; font-size: 20px; left:240px; top:160px;">ampm</span>
+    </div>
+    
+    
+	<div><ul>
+      	<li><a class="active" href="index.html">주요 소식</a></li>
+      	<li><a href="manual.html">비상시 행동 요령</a></li>
+      	<li><a href="ㄱhelper.html">도우미 연락망</a></li>      
+      	<li><a href="ㄱcontact.html">만든 사람들</a></li>
+	</ul></div></nav>
+	
+<main>
+	<span id="faq-title">주요기관 연락처</span>
+	<a href = "https://www.safekorea.go.kr/idsiSFK/neo/main/main.html"
+	target='_blank'><br>(출처 : 행정안전부 홈페이지)</a>
+	
+      <div class="faq-content">
+        <button class="question" id="que-1"><span id="que-1-toggle">+</span><span>위기상황, 긴급상황 시 신고전화</span></button>
+        <div class="answer" id="ans-1">∙ 재난신고 119, 범죄신고 112, 민원 상담110<br/>∙ 행정안전부 중앙재난안전상황실 044)205-1542~3</div>
+      </div>
+      
+      <div class="faq-content">
+        <button class="question" id="que-2"><span id="que-2-toggle">+</span><span>행정안전부 국민행동요령, 임시주거실 등 안내</span></button>
+        <div class="answer" id="ans-2">∙ 행정안전부 홈페이지 <a href = "http://www.mois.go.kr">http://www.mois.go.kr</a><br/>∙ 행정안전부 국민재난안전포털 <a href = "http://www.safekorea.go.kr">http://www.safekorea.go.kr</a><br/>∙ 스마트폰 어플리케이션 ‘안전디딤돌’</div>
+      </div></main>
+     
+      <script>
+      var Target = document.getElementById("clock");
+      var Target_apm = document.getElementById("apm");
+      function clock() {
+          var time = new Date();
+          var hours = time.getHours();
+          var minutes = time.getMinutes();
+          var seconds = time.getSeconds();
+          var AmPm ="AM";
+          if(hours > 12){  
+              var AmPm ="PM";
+              hours %= 12;
+          }
+
+          Target.innerText =
+          `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+
+          Target_apm.innerText = `${AmPm}`;
+
+      }
+      clock();
+      setInterval(clock, 1000);
+      
+        const items = document.querySelectorAll('.question');
+     
+        function openCloseAnswer() {
+          const answerId = this.id.replace('que', 'ans');
+     
+          if(document.getElementById(answerId).style.display === 'block') {
+            document.getElementById(answerId).style.display = 'none';
+            document.getElementById(this.id + '-toggle').textContent = '+';
+          }
+          else {
+            document.getElementById(answerId).style.display = 'block';
+            document.getElementById(this.id + '-toggle').textContent = '-';
+          }
+        }
+     
+        items.forEach(item => item.addEventListener('click', openCloseAnswer));
+      </script>
+
+
+</body>
+</html>
