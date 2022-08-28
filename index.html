@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html style="font-family: 'Gowun Dodum', sans-serif;">
+<head>
+<meta charset="UTF-8">
+<link type = "text/css" rel ="stylesheet" href = "main.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<meta name = "keyword" content="Community page">
+<meta name="description" content="main page">
+<meta name = "author" content = "2113424, 2116740, 2114178">
+<title>A :live main page</title>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5e51cb774b1930611c3177de014d99f7&libraries=services"></script>
+
+<script>
+function success(position){
+	const lat = position.coords.latitude;
+
+	const lon = position.coords.longitude;
+	show_map(lat, lon);
+}
+
+function getGeolocation(){
+	if(navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(success);
+	}
+    else
+	    alert("지원하지 않음");
+}
+
+
+function show_map(lat, lon){ 
+	let map_box = document.getElementById('map');
+    let options = { //지도를 생성할 때 필요한 기본 옵션
+	center: new kakao.maps.LatLng(lat, lon), //지도의 중심좌표.
+	level: 3 //지도의 레벨(확대, 축소 정도)
+	};
+    let map = new kakao.maps.Map(map_box, options);
+    searchAddrFromCoords(options.center, displayCenterInfo);
+    
+    show_position(map);
+    show_markers(map);
+}
+
+function show_markers(map){
+	
+	if(!window.localStorage||!window.sessionStorage){
+    	alert("localStorage 또는 sessionStorage를 지원하지 않습니다.");
+    	return;
+    }
+	
+	let imageSrc_1= "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+	let imageSrc_2="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png";
+	
+	for (let i=0; i<localStorage.length; i++){
+		let addr=localStorage.key(i);
+	    let contents=JSON.parse(localStorage.getItem(addr));
+	    let len=Object.keys(contents).length;
+	    let latlng;
+	    imageSrc=(len<5)? imageSrc_1: imageSrc_2;
+		let imageSize=(len<5)?new kakao.maps.Size(24, 35):new kakao.maps.Size(34, 40);
+		let markerImage=new kakao.maps.MarkerImage(imageSrc, imageSize);
+		
+		geocoder.addressSearch(addr, function(result, status) {
+		    // 정상적으로 검색이 완료됐으면 
+		     if (status === kakao.maps.services.Status.OK){
+		        latlng = new kakao.maps.LatLng(result[0].y, result[0].x);
+		        let marker = new kakao.maps.Marker({
+			        map: map, // 마커를 표시할 지도
+			        position: latlng, // 마커를 표시할 위치
+			        title : addr, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+			        image : markerImage// 마커 이미지 
+			    });
+		        show_news(marker, map, latlng, contents);
+		     }
+		     else
+		    	 alert("검색 오류");
+		});
+		
+	}
+}
+
+function show_news(marker, map, iwPosition, con){
+	let len=Object.keys(con).length;
+	let iwContent="<div style='padding:0; overflow:auto; width:600px; height: 400px;'><div style='text-align:center; font-size: 30px; line-height: 55px; background-color: orange; width: 100%; height: 55px; margin: 0; margin-bottom: 20px;'>"+len+"개의 게시물</div>",
+	    iwRemoveable = true;
+
+	for (let i=0; i<len; i++){
+		
+		let arr=Object.values(con)[i].split("*");
+		
+		iwContent+="<div style='padding: 10px;'>작성 날짜: "+arr[0]+"<br><br>내용: <div style='padding: 10px;'>"
+        + arr[1] +"</div><br>사진 및 동영상<br><img src='"+ arr[2] +"'></div><hr style='height: 2px; background-color: orange; border: 0;'>";
+	}
+	
+	iwContent+="</div>";
+    // 인포윈도우를 생성합니다
+    let infowindow = new kakao.maps.InfoWindow({
+    	position : iwPosition, 
+        content : iwContent, 
+        removable : iwRemoveable
+    });
+  
+    kakao.maps.event.addListener(marker, 'click', function() {
+        // 마커 위에 인포윈도우를 표시합니다
+        infowindow.open(map, marker);  
+    });
+}
+
+function show_position(map){
+	let marker = new kakao.maps.Marker({
+		position: map.getCenter()
+	});
+	
+    marker.setMap(map);
+    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
+        
+        // 클릭한 위도, 경도 정보를 가져옵니다 
+        let latlng = mouseEvent.latLng; 
+        
+        // 마커 위치를 클릭한 위치로 옮깁니다
+        marker.setPosition(latlng);
+        
+        searchDetailAddrFromCoords(latlng, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var detailAddr = !!result[0].road_address ? '도로명주소 : ' + result[0].road_address.address_name + '<br>' : '';
+                detailAddr += '지번주소: ' + result[0].address.address_name;
+                store_position=result[0].address.address_name;
+            }
+            document.getElementById("chosen").innerHTML=detailAddr; 
+        });
+        
+    });
+    
+    kakao.maps.event.addListener(map, 'center_changed', function() {
+    	marker.setPosition(map.getCenter());
+    });
+    
+    kakao.maps.event.addListener(map, 'idle', function() {
+        searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+    });
+    
+}
+
+function searchAddrFromCoords(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
+}
+
+function searchDetailAddrFromCoords(coords, callback) {
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+}
+
+function displayCenterInfo(result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+        var c_position = document.getElementById("c_position");
+
+        for(var i = 0; i < result.length; i++) {
+            // 행정동의 region_type 값은 'H' 이므로
+            if (result[i].region_type === 'H') {
+            	c_position.innerHTML = result[i].address_name;
+                break;
+            }
+        }
+    }    
+}
+
+let geocoder = new kakao.maps.services.Geocoder();
+window.addEventListener("load", getGeolocation);
+let store_position;
+
+function store_contents(date){
+	
+	if(!window.localStorage||!window.sessionStorage){
+    	alert("localStorage 또는 sessionStorage를 지원하지 않습니다.");
+    	return;
+    }
+	
+	let article=document.getElementById("article").value;
+	let media_url=document.getElementById("file").value;
+	
+	let num;
+	for (let i=0; i<localStorage.length; i++){
+		if (store_position==localStorage.key(i)){
+			let arr=JSON.parse(localStorage.getItem(store_position));
+			num=Object.keys(arr).length+1;
+			arr[num]=""+ date + "*" + article + "*" + media_url + "";
+			localStorage.setItem(store_position, JSON.stringify(arr));
+			alert("게시되었습니다.");
+			return;
+		}
+	}
+	
+	let contents=JSON.stringify({"1" :""+ date + "*" + article + "*" + media_url + ""});
+	localStorage.setItem(store_position, contents);
+	alert("게시되었습니다.");
+}
+
+function store_date(){
+	
+	let today=new Date();
+	
+	let date = today.getFullYear() + "."
+	+ (today.getMonth()+1) + "."
+	+ today.getDate()+" ["
+	+ ('0'+today.getHours()).slice(-2)+":"
+	+ ('0'+today.getMinutes()).slice(-2)+"]";
+    
+	store_contents(date);
+}
+
+</script>
+</head>
+
+<body>
+    <table>
+    <tr><td style="width: 24%;">
+    <nav><div style="text-align: center; width: 100%; margin-top:8.6%;">
+    	<a href = "index.html">
+        <img src = "alive.jpg" id="alive"></a>
+    </div>
+    
+    <div style="text-align: center; margin-bottom: 8.3%;">
+        <span id="clock" style="color:black; font-size: 30px;top:164px">clock</span>
+        <span id="apm" style="color:black; font-size: 20px; left:238px; top:174.8px;">ampm</span>
+    </div>
+
+	<div><ul>
+      <li><a class="active" href="index.html">주요 소식</a></li>
+      <!-- 홈페이지의 메인페이지, 지도와 간단한 지역들의 주요 소식들이 뜬다. -->
+      <li><a href="manual.html">비상시 행동 요령</a></li>
+      <!-- 집중호우, 폭설, 폭염 등의 비상상황 발생 시 행동 매뉴얼을 정리한 페이지다. -->
+      <li><a href="helper.html">도우미 연락망</a></li>
+      <!-- 112,119 등 비상연락망을 정리한 페이지다. -->
+      <li><a href="contact.html">만든 사람들</a></li>
+      <!-- 제작자들의 정보가 담긴 페이지이다. -->      
+    </ul></div></nav>
+    
+    <div id="form" style="width: 99%; height: 60%; border: solid 2px #ac1e42; border-top-style: dashed; text-align: center;">
+   <form method="post" enctype="multupart/form-data">
+    <p><strong>지금 나의 위치</strong><br>(드래그로 위치를 바꿀 수 있어요!):<br><span id="c_position"></span></p>
+    <p><strong>선택한 위치</strong><br><span id="chosen"></span></p>
+    <p>현재 어떤 상황인가요?<br>
+    <textarea id="article" cols="30" rows="10"></textarea></p>
+    <p>현재 상황을 더 생생하게 보여주세요!<br>  
+    <input type="text" id="file" name="file" placeholder="url을 넣어주세요!"><br>
+    </p>
+    <input type="submit" value="submit" onclick="store_date()" style="background-color: #ac1e42; border-color: #ac1e42; color: white;"><br><br>
+   </form>
+  </div></td>
+    <td style="width: 74%;">
+    <div id="map" style="width: 100%; height: 100%; background-color: orange;"></div>
+ </td></tr>
+ </table>
+ <script>
+        var Target = document.getElementById("clock");
+        var Target_apm = document.getElementById("apm");
+        function clock() {
+            var time = new Date();
+            var hours = time.getHours();
+            var minutes = time.getMinutes();
+            var seconds = time.getSeconds();
+            var AmPm ="AM";
+            if(hours > 12){  
+                var AmPm ="PM";
+                hours %= 12;
+            }
+            Target.innerText =
+            `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+ 
+            Target_apm.innerText = `${AmPm}`;
+ 
+        }
+        clock();
+        setInterval(clock, 1000);
+    </script>
+</body>
+</html>
