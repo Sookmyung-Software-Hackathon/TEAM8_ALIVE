@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link type = "text/css" rel ="stylesheet" href = "contact.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<meta name = "keyword" content="Community page">
+<meta name="description" content="Contact mepage">
+<meta name = "author" content = "2113424, 2116740, 2114178">
+<title>만든 사람들</title>
+</head>
+
+
+<body>
+<nav><!-- 로고 넣기 -->
+	<div style = "width : 100%; text-align: center;">
+	<a href = "index.html">
+	<img src = "alive.jpg" style="width:20%;"></a></div>	
+	
+	<div><ul>
+      	<li><a class="active" href="index.html">주요 소식</a></li>
+      	<li><a href="manual.html">비상시 행동 요령</a></li>
+      	<li><a href="ㄱhelper.html">도우미 연락망</a></li>      
+      	<li><a href="ㄱcontact.html">만든 사람들</a></li>
+	</ul></div></nav>
+
+	<div style="margin-left : 109px; margin-top : 27px;">
+    <span id="clock" style="color:black; font-size: 30px;">clock</span>
+    <span id="apm" style="color:black; font-size: 20px; left:240px; top:160px;">ampm</span>
+    </div>
+	
+    <div style = "width : 1250px;margin-top : -20px;">
+        <p style="font-size:20px;margin-top:30px; margin-left:500px;"><mark>김예지</mark>
+        <img src = "email.png" style = "width:35px; height:35px; margin-left:0px; margin-top:15px;">
+        <a style= "display : block;margin-top:-30px;">kyeji02@sookmyung.ac.kr</a>
+        <img src = "phone-icon-style.png" style = "width:40px; height:40px; margin-left:-5px">
+        <a style= "display : block;margin-top:-30px;">010-2647-1482</a></p></div>
+    
+    <div style = "width : 1250px;">
+        <p style="font-size:20px; margin-top:30px; margin-left:500px;"><mark>김지윤</mark>
+		<img src = "email.png" style = "width:35px; height:35px; margin-left:0px; margin-top:15px;">
+        <a style= "display : block;margin-top:-30px;">ally432@sookmyung.ac.kr</a>
+        <img src = "phone-icon-style.png" style = "width:40px; height:40px; margin-left:-5px">
+        <a style= "display : block;margin-top:-30px;">010-4184-1450</a></p></div>
+    
+    <div style = "width : 1250px;">
+        <p style="font-size:20px; margin-top:30px; margin-left:500px;"><mark>이수현</mark>
+        <img src = "email.png" style = "width:35px; height:35px; margin-left:0px; margin-top:15px;">
+        <a style= "display : block;margin-top:-30px;">sophia2359@sookmyung.ac.kr</a>
+        <img src = "phone-icon-style.png" style = "width:40px; height:40px; margin-left:-5px">
+        <a style= "display : block;margin-top:-30px;">010-2359-0952</a></p></div>
+    
+       <script>
+        var Target = document.getElementById("clock");
+        var Target_apm = document.getElementById("apm");
+        function clock() {
+            var time = new Date();
+            var hours = time.getHours();
+            var minutes = time.getMinutes();
+            var seconds = time.getSeconds();
+            var AmPm ="AM";
+            if(hours > 12){  
+                var AmPm ="PM";
+                hours %= 12;
+            }
+ 
+            Target.innerText =
+            `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+ 
+            Target_apm.innerText = `${AmPm}`;
+ 
+        }
+        clock();
+        setInterval(clock, 1000);
+    </script> 
+    
+</body>
+</html>
